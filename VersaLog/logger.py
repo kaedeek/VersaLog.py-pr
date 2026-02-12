@@ -1,5 +1,6 @@
 from typing import Optional, Union, List
 from plyer import notification
+from contextlib import contextmanager
 
 import datetime
 import inspect
@@ -237,3 +238,22 @@ class VersaLog:
 
     def board(self):
         print("=" * 45)
+
+    def progress(self, title: str, current: int, total: int, tag: Optional[Union[str, List[str]]] = None):
+        percent = int((current / total) * 100) if total else 0
+        msg = f"{title} : {percent}% ({current}/{total})"
+        self._Log(msg, "INFO", tag)
+
+    def step(self, title: str, step: int, total: int, tag: Optional[Union[str, List[str]]] = None):
+        msg = f"[STEP {step}/{total}] {title}"
+        self._Log(msg, "INFO", tag)
+
+    @contextmanager
+    def timer(self, title: str, tag: Optional[Union[str, List[str]]] = None):
+        start = time.time()
+        self._Log(f"{title} : start", "INFO", tag)
+        try:
+            yield
+        finally:
+            elapsed = time.time() - start
+            self._Log(f"{title} : done ({elapsed:.2f}s)", "INFO", tag)
