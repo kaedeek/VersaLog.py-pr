@@ -27,14 +27,14 @@ def process_file(file_index: int, total_files: int):
 def main():
     total_files = 5
 
-    log.section("Batch Start")
+    log.info("Batch Start")
 
     with log.timer("Total Batch"):
         for i in range(1, total_files + 1):
             process_file(i, total_files)
             log.progress("Overall Progress", i, total_files)
 
-    log.section("Batch Finished")
+    log.info("Batch Finished")
 
 
 if __name__ == "__main__":
